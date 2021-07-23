@@ -56,8 +56,9 @@ public class World {
 			(tiles[x4 + (y4*World.WIDTH)] instanceof WallTile));		
 	}
 	
-	public static void restartGame(String level) {
-		Game.player = new Player (0, 0, 16, 16, 2, Game.spritesheet.getSprite(0, 0, 16, 16));
+	public static void restartGame() {
+		Game.score = 0;
+		Game.player = new Player (Game.WIDTH/2 - 30, Game.HEIGHT/2 - (Game.spriteSize/2), Game.spriteSize, Game.spriteSize, 1, Game.spritesheet.getSprite(0, 0, Game.spriteSize, Game.spriteSize));
 		Game.entities.clear();
 		Game.entities.add(Game.player);
 		return;
@@ -71,14 +72,18 @@ public class World {
 		int yfinal = ystart + (Game.HEIGHT >> 4);
 		
 		
-		for(int xx = xstart; xx <= xfinal; xx++) {
-			for(int yy = ystart; yy <= yfinal; yy++) {
-				if (xx < 0 || yy < 0 || xx >= WIDTH || yy >= HEIGHT)
-					continue;
-				Tile tile = tiles[xx + (yy*WIDTH)];
-				tile.render(g);
-			}
-		}
+//		for(int xx = xstart; xx <= xfinal; xx++) {
+//			for(int yy = ystart; yy <= yfinal; yy++) {
+//				if (xx < 0 || yy < 0 || xx >= WIDTH || yy >= HEIGHT)
+//					continue;
+//				Tile tile = tiles[xx + (yy*WIDTH)];
+//				tile.render(g);
+//			}
+//		}
+	}
+	
+	public void renderGround(Graphics g) {
+		
 	}
 }
 

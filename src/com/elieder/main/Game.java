@@ -21,6 +21,7 @@ import com.elieder.entities.Entity;
 import com.elieder.entities.Player;
 import com.elieder.graficos.Spritesheet;
 import com.elieder.graficos.UI;
+import com.elieder.world.TubeGenerator;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 	
@@ -34,12 +35,16 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static final int HEIGHT = 160;
 	public static final int SCALE = 3;
 	
-	public int spriteSize = 16;
+	public static int gameSpeed = 1;
+	
+	public static int spriteSize = 16;
 	private BufferedImage image;
 	
 	public static List<Entity> entities;
 	public static Spritesheet spritesheet;	
-	public static Player player;	
+	public static Player player;
+	
+	public static TubeGenerator tubeGenerator;
 	
 	public UI ui;
 	
@@ -57,9 +62,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 //		Inicializando objetos		
 		spritesheet = new Spritesheet("/Spritesheet.png");		
-		player = new Player(WIDTH/2 - 30, HEIGHT/2 - (spriteSize/2), spriteSize, spriteSize, 1, spritesheet.getSprite(0, 0, spriteSize, spriteSize));
+		tubeGenerator = new TubeGenerator();
 		ui = new UI();
 		entities = new ArrayList<Entity>();	
+		createPlayer();
+	
+	}
+	
+	public void createPlayer() {
+		player = new Player(WIDTH/2 - 30, HEIGHT/2 - (spriteSize/2), spriteSize, spriteSize, 2, spritesheet.getSprite(0, 0, spriteSize, spriteSize));
 		entities.add(player);			
 	
 	}
@@ -130,6 +141,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	public void tick() {
 		
+		tubeGenerator.tick();
+		
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);
 			e.tick();
@@ -162,7 +175,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		bs.show();
 	}
 
-	// KEYBOARD EVENTS
+	// KEYBOARD EVENTS	
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 			
@@ -171,12 +185,18 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	@Override
 	public void keyPressed(KeyEvent e) {	
-						
+		
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			player.isPressed = true;
+		}
+		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {	
-				
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			player.isPressed = false;
+		}	
 	}
 		
 	// MOUSE EVENTS

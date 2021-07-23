@@ -1,5 +1,6 @@
 package com.elieder.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -16,30 +17,36 @@ import com.elieder.world.World;
 public class Entity {
 	
 		
-	protected double x;
-	protected double y;
+	protected int x;
+	protected int y;
 	protected int width;
 	protected int height;
+	protected int maskX, maskY;
+	protected int maskW, maskH;
 	protected double speed;
 	
-	public int depth;	
+	public int depth;
 	
 	protected List<Node> path;
 	
-	private BufferedImage sprite;
+	protected BufferedImage sprite;
 	
 	public static Random rand = new Random();
 	
-	public Entity(double x, double y, int width, int height, double speed, BufferedImage sprite) {
+	public Entity(int x, int y, int width, int height, double speed, BufferedImage sprite) {
 		this.x = x;
 		this.y = y;
-		this.speed = speed;
 		this.width = width;
 		this.height = height;
+		this.maskX = x;
+		this.maskY = y;
+		this.maskW = width;
+		this.maskH = height;				
+		this.speed = speed;
 		this.sprite = sprite;
 	}
 	
-	public static Comparator<Entity> nodeSorter = new Comparator<Entity>() {	
+	public static Comparator<Entity> nodeSorter = new Comparator<Entity>() {
 				
 		@Override
 		public int compare(Entity n0, Entity n1) {
@@ -110,8 +117,8 @@ public class Entity {
 	}
 	
 	public static boolean isColliding(Entity e1, Entity e2) {
-		Rectangle e1Mask = new Rectangle(e1.getX(), e1.getY(), e1.getWidth(), e1.getHeight());
-		Rectangle e2Mask = new Rectangle(e2.getX(), e2.getY(), e2.getWidth(), e2.getHeight());
+		Rectangle e1Mask = new Rectangle(e1.maskX, e1.maskY, e1.maskW, e1.maskH);
+		Rectangle e2Mask = new Rectangle(e2.maskX, e2.maskY, e2.maskW, e2.maskH);
 		return e1Mask.intersects(e2Mask);
 			
 	}
@@ -126,4 +133,14 @@ public class Entity {
 	//		g.setColor(Color.red);
 	//		g.fillRect(this.getX() + maskx - Camera.x, this.getY() + masky - Camera.y, mwidth, mheight);
 		}
+
+	protected void renderMask (Entity entity, Color color, Graphics g) {
+		this.maskX = entity.maskX;
+		this.maskY = entity.maskY;
+		this.maskW = entity.maskW;
+		this.maskH = entity.maskH;
+		
+		g.setColor(color);
+		g.fillRect((int)maskX, (int)maskY, maskW, maskH);
+	}
 }
