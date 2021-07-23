@@ -16,7 +16,8 @@ import com.elieder.world.World;
 
 public class Entity {
 	
-		
+	protected boolean renderMask = false;	
+	
 	protected int x;
 	protected int y;
 	protected int width;
@@ -140,7 +141,14 @@ public class Entity {
 		this.maskW = entity.maskW;
 		this.maskH = entity.maskH;
 		
-		g.setColor(color);
-		g.fillRect((int)maskX, (int)maskY, maskW, maskH);
+		if (renderMask == true) {
+			g.setColor(color);
+			g.fillRect((int)maskX, (int)maskY, maskW, maskH);
+			
+		}
+		
+		
 	}
+
+
 }

@@ -21,6 +21,7 @@ import com.elieder.entities.Entity;
 import com.elieder.entities.Player;
 import com.elieder.graficos.Spritesheet;
 import com.elieder.graficos.UI;
+import com.elieder.world.GroundGenerator;
 import com.elieder.world.TubeGenerator;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener, MouseMotionListener {
@@ -45,6 +46,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static Player player;
 	
 	public static TubeGenerator tubeGenerator;
+	public static GroundGenerator groundGenerator;
 	
 	public UI ui;
 	
@@ -63,6 +65,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 //		Inicializando objetos		
 		spritesheet = new Spritesheet("/Spritesheet.png");		
 		tubeGenerator = new TubeGenerator();
+		groundGenerator = new GroundGenerator();
 		ui = new UI();
 		entities = new ArrayList<Entity>();	
 		createPlayer();
@@ -142,6 +145,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public void tick() {
 		
 		tubeGenerator.tick();
+		groundGenerator.tick();
 		
 		for (int i = 0; i < entities.size(); i++) {
 			Entity e = entities.get(i);

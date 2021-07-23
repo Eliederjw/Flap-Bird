@@ -19,7 +19,7 @@ public class Player extends Entity{
 	
 	public boolean isPressed = false;
 	
-	private final int NORMAL = 0, HIT = 1;
+	private final int NORMAL = 0, HIT = 1, ONGROUND = 2;
 	
 	public int playerState = NORMAL;
 	
@@ -82,7 +82,7 @@ public class Player extends Entity{
 			// Testar colisão
 			for (int i = 0; i < Game.entities.size(); i++) {
 				Entity e = Game.entities.get(i);
-				if(e != this) {
+				if(e instanceof Tube || e instanceof Ground) {
 					if (Entity.isColliding(this, e)) {
 						playerState = HIT;
 						return;
@@ -90,10 +90,28 @@ public class Player extends Entity{
 				}
 			}
 			break;
-			
+
+//==========================================
+
 		case HIT:
 			Game.gameSpeed = 0;
+			speed = -1;
+			y += GRAVITY-speed;
+			
+			for (int i = 0; i < Game.entities.size(); i++) {
+				Entity e = Game.entities.get(i);
+				if(e instanceof Ground) {
+					if (Entity.isColliding(this, e)) {
+						playerState = ONGROUND;
+						return;
+					}
+				}
+			}
+			
 			break;
+
+//==========================================
+		case ONGROUND:
 			
 		}
 		
@@ -117,20 +135,16 @@ public class Player extends Entity{
 				fallingTime++;
 				
 			} else {
-				rotate(-45);
+				rotate(-30);
 				fallingTime = -1;
 			}	
 		break;
 		
-		case HIT:
+		case HIT, ONGROUND:
 			rotate(90);
 			fallingTime = -1;
-		break;
-		
-		
-		}
-		
-		
+		break;		
+		}				
 		
 	}
 	

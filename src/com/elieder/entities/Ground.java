@@ -5,38 +5,32 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.elieder.main.Game;
+import com.elieder.world.GroundGenerator;
 
-public class Tube extends Entity {
-	
-	public Tube(int x, int y, int width, int height, double speed, BufferedImage sprite) {
+public class Ground extends Entity{
+
+	public Ground(int x, int y, int width, int height, double speed, BufferedImage sprite) {
 		super(x, y, width, height, speed, sprite);
-		
-		
+		// TODO Auto-generated constructor stub
 	}
-	public void tick() {		
-			
-		depth = 2;
+	
+	public void tick() {
+		depth = 1;
 		setMask(); 
 		
-		x-=Game.gameSpeed;
-		
-		if (x +(Game.spriteSize/2) == Game.player.x) {
-			Game.score++;
-		}
+		x-=Game.gameSpeed;		
 		
 		if (x+width <= 0) {
 			Game.entities.remove(this);
+			GroundGenerator.setGroundwidth(width);
 			return;
 		}
 	}
 	
-	public void render(Graphics g) { 
-	
-		g.setColor(Color.green);
+	public void render(Graphics g) {
+		g.setColor(Color.orange);
 		g.fillRect(x, y, width, height);
 		renderMask(this, new Color(0, 0, 255), g);
-		
-		
 	}
 	
 	private void setMask() {
@@ -45,5 +39,5 @@ public class Tube extends Entity {
 		maskW = width;
 		maskH= height;
 	}
-
+	
 }
