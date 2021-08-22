@@ -58,9 +58,9 @@ public class World {
 	
 	public static void restartGame() {
 		Game.score = 0;
-		Game.player = new Player (Game.WIDTH/2 - 30, Game.HEIGHT/2 - (Game.spriteSize/2), Game.spriteSize, Game.spriteSize, 1, Game.spritesheet.getSprite(0, 0, Game.spriteSize, Game.spriteSize));
 		Game.entities.clear();
-		Game.entities.add(Game.player);
+		Game.gameState = Game.STARTSCREEN;
+		Game.loadGame();
 		return;
 	}
 	

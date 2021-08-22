@@ -16,9 +16,9 @@ public class Ground extends Entity{
 	
 	public void tick() {
 		depth = 1;
-		setMask(); 
+		setMask();
 		
-		x-=Game.gameSpeed;		
+		x-=Game.gameSpeed;
 		
 		if (x+width <= 0) {
 			Game.entities.remove(this);

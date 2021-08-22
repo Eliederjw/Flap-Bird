@@ -19,10 +19,12 @@ import javax.swing.JFrame;
 
 import com.elieder.entities.Entity;
 import com.elieder.entities.Player;
+import com.elieder.graficos.ScoreBoard;
 import com.elieder.graficos.Spritesheet;
 import com.elieder.graficos.UI;
 import com.elieder.world.GroundGenerator;
 import com.elieder.world.TubeGenerator;
+import com.elieder.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 	
@@ -36,14 +38,20 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static final int HEIGHT = 160;
 	public static final int SCALE = 3;
 	
-	public static int gameSpeed = 1;
+	public static final int INICIAL_GAME_SPEED = 1;; 
+	public static int gameSpeed = INICIAL_GAME_SPEED;
+	
+	public static final int GAME = 0, STARTSCREEN = 1, GAME_OVER = 2;
+	public static int gameState = GAME;
 	
 	public static int spriteSize = 16;
 	private BufferedImage image;
 	
 	public static List<Entity> entities;
-	public static Spritesheet spritesheet;	
+	public static Spritesheet spritesheet;
 	public static Player player;
+	
+	public static ScoreBoard scoreBoard;
 	
 	public static TubeGenerator tubeGenerator;
 	public static GroundGenerator groundGenerator;
@@ -51,6 +59,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public UI ui;
 	
 	public static int score = 0;
+	public static int bestScore = 0;
 		
 	
 	public Game() {
@@ -67,12 +76,24 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		tubeGenerator = new TubeGenerator();
 		groundGenerator = new GroundGenerator();
 		ui = new UI();
-		entities = new ArrayList<Entity>();	
-		createPlayer();
+
+		entities = new ArrayList<Entity>();
+		
+		loadGame();	
+		
+		gameState = STARTSCREEN;
 	
 	}
 	
-	public void createPlayer() {
+	public static void loadGame() {
+
+		createPlayer();
+		scoreBoard = new ScoreBoard(WIDTH/2, HEIGHT/2, 120, 80, 0, null);
+		entities.add(scoreBoard);
+		gameSpeed = INICIAL_GAME_SPEED;
+	}
+	
+	private static void createPlayer() {
 		player = new Player(WIDTH/2 - 30, HEIGHT/2 - (spriteSize/2), spriteSize, spriteSize, 2, spritesheet.getSprite(0, 0, spriteSize, spriteSize));
 		entities.add(player);			
 	
@@ -144,7 +165,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	public void tick() {
 		
+		switch (gameState) {
+		
+		case GAME:		
 		tubeGenerator.tick();
+		break;
+		
+		}
+		
 		groundGenerator.tick();
 		
 		for (int i = 0; i < entities.size(); i++) {
@@ -188,16 +216,29 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {	
+	public void keyPressed(KeyEvent e) {
 		
-		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-			player.isPressed = true;
+		switch (gameState) {
+		case GAME:
+			if (e.getKeyCode() == KeyEvent.VK_SPACE) player.isPressed = true;
+			break;
+			
+		case STARTSCREEN:
+			if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+				gameState = GAME;
+				player.isPressed = true;
+			}
+			break;
+			
+		case GAME_OVER:
+			if (e.getKeyCode() == KeyEvent.VK_SPACE) World.restartGame();
+			break; 
 		}
 		
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {	
+	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			player.isPressed = false;
 		}	

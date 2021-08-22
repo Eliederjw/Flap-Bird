@@ -12,22 +12,34 @@ public class GroundGenerator {
 	public int tubeGap = 50;
 	private static int groundWidthTotal;
 	
-	public void tick() {		
+	public void tick() {
 		
 		int groundHeight = 10;
 		int groundHPosition = Game.HEIGHT - groundHeight;
 		
+		switch (Game.gameState) {
+		
+		case Game.STARTSCREEN, Game.GAME:
+			
 		if (groundWidthTotal < Game.WIDTH + 75  ) {
 			while (groundWidthTotal < Game.WIDTH + 75) {
 				Ground ground = new Ground(groundWidthTotal, groundHPosition, 75, groundHeight, Game.gameSpeed, null);
 				groundWidthTotal+=ground.getWidth();
 				
-				Game.entities.add(ground); 
+				Game.entities.add(ground);
 				
-				time = 0;			
+				time = 0;		
 				
 			}				
-		}		
+		}	
+		break;
+		
+		case Game.GAME_OVER:
+			groundWidthTotal = 0;
+			
+		break;
+		}
+		
 	}
 	
 	public static void setGroundwidth(int i) {

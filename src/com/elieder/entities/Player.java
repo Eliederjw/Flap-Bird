@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import com.elieder.graficos.Animation;
+import com.elieder.graficos.ScoreBoard;
 import com.elieder.main.Game;
 import com.elieder.world.World;
 
@@ -17,7 +18,7 @@ public class Player extends Entity{
 	
 	private Animation playerAnimation;
 	
-	public boolean isPressed = false;
+	public boolean isPressed = true;
 	
 	private final int NORMAL = 0, HIT = 1, ONGROUND = 2;
 	
@@ -32,8 +33,6 @@ public class Player extends Entity{
 	private int fallingTime = -1; 
 	
 	private double degrees = 0;
-	
-	
 	
 	
 	public Player(int x, int y, int width, int height, double speed, BufferedImage sprite) {
@@ -56,64 +55,73 @@ public class Player extends Entity{
 				
 		setMask();
 		
-		switch (playerState){
-		case NORMAL:			
+		switch (Game.gameState) {
+		case Game.GAME:
+			
+			switch (playerState){
+			case NORMAL:			
 				
-			if(isPressed && oneShot == true) {
-				speed = 6;
-				speedStrength = speed;
-				oneShot = false;
-			}else { 			
-				isPressed = false;
-				oneShot = true;
+				if(isPressed && oneShot == true) {
+					speed = 6;
+					speedStrength = speed;
+					oneShot = false;
+				}else { 			
+					isPressed = false;
+					oneShot = true;
+					
+				}
+				speedStrength = speedStrength * 0.95;
 				
-			}
-			speedStrength = speedStrength * 0.95;
-			
-			if (speedStrength - Math.floor(speed) < 0.1) speed = Math.floor(speedStrength);
-			
-			y += GRAVITY-speed;
-			
-			if (y > Game.HEIGHT) {
-				World.restartGame();
-				return;
-			}
-			
-			// Testar colisão
-			for (int i = 0; i < Game.entities.size(); i++) {
-				Entity e = Game.entities.get(i);
-				if(e instanceof Tube || e instanceof Ground) {
-					if (Entity.isColliding(this, e)) {
-						playerState = HIT;
-						return;
+				if (speedStrength - Math.floor(speed) < 0.1) speed = Math.floor(speedStrength);
+				
+				y += GRAVITY-speed;
+				
+				if (y < 0) {
+					playerState = HIT;
+					return;
+				}
+				
+				// Testar colisão
+				for (int i = 0; i < Game.entities.size(); i++) {
+					Entity e = Game.entities.get(i);
+					if(e instanceof Tube || e instanceof Ground) {
+						if (Entity.isColliding(this, e)) {
+							playerState = HIT;
+							return;
+						}
 					}
 				}
-			}
-			break;
-
+				break;
+				
 //==========================================
-
-		case HIT:
-			Game.gameSpeed = 0;
-			speed = -1;
-			y += GRAVITY-speed;
-			
-			for (int i = 0; i < Game.entities.size(); i++) {
-				Entity e = Game.entities.get(i);
-				if(e instanceof Ground) {
-					if (Entity.isColliding(this, e)) {
-						playerState = ONGROUND;
-						return;
+				
+			case HIT:
+				Game.gameSpeed = 0;
+				speed = -1;
+				y += GRAVITY-speed;
+				
+				for (int i = 0; i < Game.entities.size(); i++) {
+					Entity e = Game.entities.get(i);
+					if(e instanceof Ground) {
+						if (Entity.isColliding(this, e)) {
+							playerState = ONGROUND;
+							return;
+						}
 					}
 				}
-			}
-			
-			break;
-
+				
+				break;
+				
 //==========================================
-		case ONGROUND:
-			
+			case ONGROUND:	
+				Game.gameState = Game.GAME_OVER;
+				break;
+				
+			}
+			break;
+			//==========================================
 		}
+		
 		
 		
 		
@@ -122,29 +130,45 @@ public class Player extends Entity{
 	public void render(Graphics g) {
 		
 		depth = 0;
+		
 		g2 = (Graphics2D) g;
 		renderMask(this, new Color(255, 0, 0), g);
 		
-		switch (playerState) {
-		case NORMAL:
-			
-			animate();			
-			
-			if (speed <= 0) {
-				g2.drawImage(sprite, this.getX(), this.getY(), null);
-				fallingTime++;
-				
-			} else {
-				rotate(-30);
-				fallingTime = -1;
-			}	
-		break;
+		animate();
 		
-		case HIT, ONGROUND:
-			rotate(90);
+		switch (Game.gameState) {
+		case Game.GAME:
+			
+			switch (playerState) {
+			case NORMAL:
+				
+				
+				if (speed <= 0) {
+					g2.drawImage(sprite, this.getX(), this.getY(), null);
+					fallingTime++;
+					
+				} else {
+					rotate(-30);
+					fallingTime = -1;
+				}	
+				break;
+				
+			case HIT, ONGROUND:
+				rotate(90);
 			fallingTime = -1;
-		break;		
-		}				
+			break;	
+			}
+			break;
+			
+	case Game.STARTSCREEN:
+		g2.drawImage(sprite, this.getX(), this.getY(), null);
+		break;	
+		
+	case Game.GAME_OVER:
+		rotate(90);
+		break;
+		}
+		
 		
 	}
 	
