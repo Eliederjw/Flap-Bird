@@ -19,7 +19,7 @@ public class TubeGenerator {
 		
 		if(time == 75) {
 			// Criar tubo resetar o contador
-			int upperTubeHeight = Entity.rand.nextInt(90) + 5;
+			int upperTubeHeight = Entity.rand.nextInt(80) + 5;
 			Tube upperTube = new Tube(Game.WIDTH, 0, 20, upperTubeHeight, Game.gameSpeed, null, Tube.UP);
 			
 			int lowerTubeHeight = Game.HEIGHT - upperTubeHeight - tubeGap;

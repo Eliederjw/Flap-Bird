@@ -74,7 +74,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 //		Inicializando objetos		
 		spritesheet = new Spritesheet("/Spritesheet.png");		
 		tubeGenerator = new TubeGenerator();
-		groundGenerator = new GroundGenerator();
+		groundGenerator = new GroundGenerator("/Ground.png");
 		ui = new UI();
 
 		entities = new ArrayList<Entity>();

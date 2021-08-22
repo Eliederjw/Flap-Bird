@@ -2,16 +2,20 @@ package com.elieder.entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import com.elieder.graficos.StaticSprite;
 import com.elieder.main.Game;
 import com.elieder.world.GroundGenerator;
 
 public class Ground extends Entity{
+		
 
 	public Ground(int x, int y, int width, int height, double speed, BufferedImage sprite) {
 		super(x, y, width, height, speed, sprite);
-		// TODO Auto-generated constructor stub
+		
+		
 	}
 	
 	public void tick() {
@@ -21,16 +25,25 @@ public class Ground extends Entity{
 		x-=Game.gameSpeed;
 		
 		if (x+width <= 0) {
+			GroundGenerator.tileRemoved();
 			Game.entities.remove(this);
-			GroundGenerator.setGroundwidth(width);
 			return;
 		}
 	}
 	
 	public void render(Graphics g) {
-		g.setColor(Color.orange);
-		g.fillRect(x, y, width, height);
-		renderMask(this, new Color(0, 0, 255), g);
+		g.drawImage(sprite, x, y, null);
+		
+		renderMask(g);
+		
+	
+	}
+	
+	private void renderMask(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setColor(new Color(255, 0, 0, 127));
+		g2.fillRect(maskX, maskY, width, height);
+		
 	}
 	
 	private void setMask() {
