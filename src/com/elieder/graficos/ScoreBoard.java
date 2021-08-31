@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.stream.Stream;
 
 import com.elieder.entities.Entity;
 import com.elieder.main.Game;
@@ -14,6 +16,7 @@ public class ScoreBoard extends Entity{
 	private int boardCenterX;
 	private int boardCenterY;
 	private StaticSprite staticSprite;
+	
 
 	public ScoreBoard(int x, int y, int width, int height, double speed, BufferedImage sprite) {
 		super(x, y, width, height, speed, sprite);
@@ -31,11 +34,11 @@ public class ScoreBoard extends Entity{
 		switch (Game.gameState) {
 		
 		case Game.GAME_OVER:
+			Color textColor = new Color(200, 149, 82);
+			Font font = new Font("Arial", Font.PLAIN, 9);
 			renderBoard(g);
-			g.setColor(new Color(197, 142, 80));
-			g.setFont(new Font("Arial", Font.PLAIN, 10));
-			g.drawString("Score: " + Game.score, boardCenterX + 5, boardCenterY + 20);
-			g.drawString("Best Score: " + Game.bestScore, boardCenterX + 5, boardCenterY + 40);
+			renderText(font, "Score", "center", x , boardCenterY + 15, textColor, g);
+			renderText(font, "Best Score", "center", x, boardCenterY + 48, textColor, g);
 		}
 	}
 	
@@ -48,6 +51,27 @@ public class ScoreBoard extends Entity{
 	private void centerBoard() {
 		boardCenterX = x - width/2;
 		boardCenterY = y - height/2;
+	}
+	
+	private void renderText(Font font, String text, String align, int x, int y, Color color, Graphics g) {
+		int textAlignment = 0;
+		g.setColor(color);
+		g.setFont(font);
+		
+		Rectangle2D stringBound = g.getFontMetrics().getStringBounds(text, g);
+		
+		switch (align) {
+		case "center":
+			textAlignment = (int) stringBound.getCenterX();
+			break;
+		case "left":
+			textAlignment = 0;
+			break;
+		case "right":
+			textAlignment = (int) stringBound.getWidth();
+		}
+		
+		g.drawString(text, x - textAlignment, y);
 	}
 
 }

@@ -3,6 +3,8 @@ package com.elieder.main;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -11,6 +13,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +24,7 @@ import javax.swing.JFrame;
 import com.elieder.entities.Entity;
 import com.elieder.entities.Ground;
 import com.elieder.entities.Player;
+import com.elieder.graficos.CustomFont;
 import com.elieder.graficos.ScoreBoard;
 import com.elieder.graficos.Spritesheet;
 import com.elieder.graficos.UI;
@@ -39,7 +44,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static final int HEIGHT = 160;
 	public static final int SCALE = 3;
 	
-	public static final int INICIAL_GAME_SPEED = 1;; 
+	public static final int INICIAL_GAME_SPEED = 1;
 	public static int gameSpeed = INICIAL_GAME_SPEED;
 	
 	public static final int GAME = 0, STARTSCREEN = 1, GAME_OVER = 2;
@@ -63,9 +68,12 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	
 	public static int score = 0;
 	public static int bestScore = 0;
+	
+	public InputStream stream; 
+	public static Font flappyBirdFont;
 		
 	
-	public Game() {
+	public Game() {		
 		addKeyListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -75,7 +83,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		
 //		Inicializando objetos		
-		spritesheet = new Spritesheet("/Spritesheet.png");		
+		spritesheet = new Spritesheet("/Spritesheet.png");
 		tubeGenerator = new TubeGenerator();
 		groundGenerator = new GroundGenerator("/Ground.png");
 		ui = new UI();
@@ -84,10 +92,19 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		grounds = new ArrayList<Ground>();
 		
-		loadGame();	
-		
-		gameState = STARTSCREEN;
+		loadGame();		
 	
+		gameState = STARTSCREEN;
+		
+		stream = ClassLoader.getSystemClassLoader().getResourceAsStream("/tw-cen-mt-condensed-3.ttf");
+		
+		try {
+			flappyBirdFont = Font.createFont(Font.TRUETYPE_FONT, stream);
+		} catch (FontFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public static void loadGame() {
@@ -194,7 +211,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 		Graphics g = image.getGraphics();
 		g.setColor(new Color(122, 102, 255));
-		g.fillRect(0, 0, WIDTH, HEIGHT);					
+		g.fillRect(0, 0, WIDTH, HEIGHT);		
 		
 //		Render entities
 		Collections.sort(entities, Entity.nodeSorter);
@@ -203,9 +220,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		renderGrounds(g);
 		
 		g.dispose();
-		g = bs.getDrawGraphics();			
+		g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null );
-		ui.render(g);	 					
+		ui.render(g);
 		
 		bs.show();
 	}
@@ -217,7 +234,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}	
 	}
 	
-	private void tickGrounds() {
+	private void tickGrounds() {		
 		for (int i = 0; i < grounds.size(); i++) {
 			Ground gr = grounds.get(i);
 			gr.tick();

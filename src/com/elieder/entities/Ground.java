@@ -23,19 +23,19 @@ public class Ground extends Entity{
 		setMask();
 		
 		x-=Game.gameSpeed;
-		
-		if (x+width < 0) {
-			GroundGenerator.tileRemoved();
-			Game.grounds.remove(this);
-			return;
-		}
+			
 	}
 	
 	public void render(Graphics g) {
 		g.drawImage(sprite, x, y, null);
 		
-		renderMask(g);		
+//		renderMask(g);		
 	
+	}
+	
+	public void removeGround() {
+		GroundGenerator.tileRemoved();
+		Game.grounds.remove(this);
 	}
 	
 	private void renderMask(Graphics g) {

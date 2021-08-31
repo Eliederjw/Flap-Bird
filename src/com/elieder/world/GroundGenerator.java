@@ -23,7 +23,7 @@ public class GroundGenerator {
 	private int groundPositionY;
 	private int groundPositionX = 0;
 	
-	private int lastGroundX;
+	private int firstGroundX;
 	
 	public GroundGenerator(String path) {
 		
@@ -38,11 +38,24 @@ public class GroundGenerator {
 		
 		int groundHeight = sprite.getHeight();
 		int groundWidth = sprite.getWidth();
+		Ground currentGround;
 		
-		if (Game.grounds.size() > 0) lastGroundX = Game.grounds.get(Game.grounds.size()-1).getX();
-		else lastGroundX = 0;
-		groundPositionY = Game.HEIGHT - groundHeight;
-		groundPositionX = lastGroundX + groundWidth;
+		if (Game.grounds.size() > 0) {
+			currentGround = Game.grounds.get(0);
+			firstGroundX = currentGround.getX();	
+			
+			groundPositionY = Game.HEIGHT - groundHeight;
+			groundPositionX = firstGroundX + (groundWidth * numberOfTiles);
+			
+			if (firstGroundX + currentGround.getWidth() == 0 ) currentGround.removeGround();
+		}
+
+		else {
+			firstGroundX = 0;
+			groundPositionY = Game.HEIGHT - groundHeight;
+			groundPositionX = firstGroundX + (groundWidth * numberOfTiles);
+
+		}		
 		
 		switch (Game.gameState) {
 		
@@ -57,7 +70,7 @@ public class GroundGenerator {
 		break;
 		
 		case Game.GAME_OVER:
-			numberOfTiles = 0;
+//			numberOfTiles = 0;
 		break;
 		}
 		
