@@ -24,9 +24,9 @@ public class Ground extends Entity{
 		
 		x-=Game.gameSpeed;
 		
-		if (x+width <= 0) {
+		if (x+width < 0) {
 			GroundGenerator.tileRemoved();
-			Game.entities.remove(this);
+			Game.grounds.remove(this);
 			return;
 		}
 	}
@@ -34,8 +34,7 @@ public class Ground extends Entity{
 	public void render(Graphics g) {
 		g.drawImage(sprite, x, y, null);
 		
-		renderMask(g);
-		
+		renderMask(g);		
 	
 	}
 	

@@ -81,15 +81,25 @@ public class Player extends Entity{
 					return;
 				}
 				
-				// Testar colisão
+				// Testar colisão com Tubo
 				for (int i = 0; i < Game.entities.size(); i++) {
 					Entity e = Game.entities.get(i);
-					if(e instanceof Tube || e instanceof Ground) {
+					if(e instanceof Tube) {
 						if (Entity.isColliding(this, e)) {
 							playerState = HIT;
 							return;
 						}
 					}
+				}
+				
+				// Testar colisão com Chão
+				for (int i = 0; i < Game.grounds.size(); i++) {
+					Ground gr = Game.grounds.get(i);
+					if (Entity.isColliding(this, gr)) {
+						playerState = HIT;
+						return;
+					}
+					
 				}
 				break;
 				
@@ -100,13 +110,11 @@ public class Player extends Entity{
 				speed = -1;
 				y += GRAVITY-speed;
 				
-				for (int i = 0; i < Game.entities.size(); i++) {
-					Entity e = Game.entities.get(i);
-					if(e instanceof Ground) {
-						if (Entity.isColliding(this, e)) {
-							playerState = ONGROUND;
-							return;
-						}
+				for (int i = 0; i < Game.grounds.size(); i++) {
+					Ground gr = Game.grounds.get(i);
+					if (Entity.isColliding(this, gr)) {
+						playerState = ONGROUND;
+						return;
 					}
 				}
 				

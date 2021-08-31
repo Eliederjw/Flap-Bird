@@ -18,6 +18,7 @@ import java.util.List;
 import javax.swing.JFrame;
 
 import com.elieder.entities.Entity;
+import com.elieder.entities.Ground;
 import com.elieder.entities.Player;
 import com.elieder.graficos.ScoreBoard;
 import com.elieder.graficos.Spritesheet;
@@ -56,6 +57,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static TubeGenerator tubeGenerator;
 	public static GroundGenerator groundGenerator;
 	
+	public static List<Ground> grounds;
+	
 	public UI ui;
 	
 	public static int score = 0;
@@ -78,6 +81,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		ui = new UI();
 
 		entities = new ArrayList<Entity>();
+		
+		grounds = new ArrayList<Ground>();
 		
 		loadGame();	
 		
@@ -175,10 +180,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		groundGenerator.tick();
 		
-		for (int i = 0; i < entities.size(); i++) {
-			Entity e = entities.get(i);
-			e.tick();
-		}		
+		tickEntities();
+		tickGrounds();
+		
+		
 	}
 
 	public void render () {
@@ -194,10 +199,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 //		Render entities
 		Collections.sort(entities, Entity.nodeSorter);
 		
-		for (int i = 0; i < entities.size(); i++) {
-			Entity e = entities.get(i);
-			e.render(g);
-		}
+		renderEntities(g);
+		renderGrounds(g);
 		
 		g.dispose();
 		g = bs.getDrawGraphics();			
@@ -206,7 +209,36 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		bs.show();
 	}
+	
+	private void tickEntities() {
+		for (int i = 0; i < entities.size(); i++) {
+			Entity e = entities.get(i);
+			e.tick();
+		}	
+	}
+	
+	private void tickGrounds() {
+		for (int i = 0; i < grounds.size(); i++) {
+			Ground gr = grounds.get(i);
+			gr.tick();
+		}	
+	}
 
+	private void renderEntities(Graphics g) {
+		for (int i = 0; i < entities.size(); i++) {
+			Entity e = entities.get(i);
+			e.render(g);
+		}
+		
+	}
+	
+	private void renderGrounds(Graphics g) {
+		for (int i = 0; i < grounds.size(); i++) {
+			Ground gr = grounds.get(i);
+			gr.render(g);
+		}
+	}
+	
 	// KEYBOARD EVENTS	
 	
 	@Override
