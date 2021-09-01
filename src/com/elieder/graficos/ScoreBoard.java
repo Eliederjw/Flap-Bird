@@ -35,10 +35,14 @@ public class ScoreBoard extends Entity{
 		
 		case Game.GAME_OVER:
 			Color textColor = new Color(200, 149, 82);
+			Color scoreColor = new Color(250, 250, 250);
 			Font font = new Font("Arial", Font.PLAIN, 9);
+			Font scoreFont = new Font("Arial", Font.BOLD, 12);
 			renderBoard(g);
 			renderText(font, "Score", "center", x , boardCenterY + 15, textColor, g);
 			renderText(font, "Best Score", "center", x, boardCenterY + 48, textColor, g);
+			renderText(scoreFont, Integer.toString(Game.score), "center", x, boardCenterY + 30, scoreColor, g);
+			renderText(scoreFont, Integer.toString(Game.bestScore), "center", x, boardCenterY + 63, scoreColor, g);
 		}
 	}
 	

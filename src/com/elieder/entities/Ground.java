@@ -9,11 +9,20 @@ import com.elieder.graficos.StaticSprite;
 import com.elieder.main.Game;
 import com.elieder.world.GroundGenerator;
 
-public class Ground extends Entity{
-		
+public class Ground extends Entity{		
+	
+	public static int groundX;
+	public static int groundY;
+	public static int groundWidth;
+	public static int groundHeight;
 
 	public Ground(int x, int y, int width, int height, double speed, BufferedImage sprite) {
 		super(x, y, width, height, speed, sprite);
+		
+		groundX = x;
+		groundY = y;
+		groundWidth = width;
+		groundHeight = height;
 		
 		
 	}

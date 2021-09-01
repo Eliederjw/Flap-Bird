@@ -11,8 +11,11 @@ import com.elieder.main.Game;
 public class UI {
 	private boolean renderText = true;
 	private int textFrame = 0, textMaxFrames = 30;
+	
+	
 
 	public void render(Graphics g) {
+				
 		g.setColor(Color.white);
 		g.setFont(new Font("Arial", Font.BOLD, 18));
 		g.drawString("Score: " + Game.score, 20, 20);
@@ -22,10 +25,10 @@ public class UI {
 			
 			String text = "<Press SPACE to Start";
 			int textX = (Game.WIDTH*Game.SCALE)/2;
-			int textY = (Game.HEIGHT*Game.SCALE)/2 + 50;
+			int textY = (Game.HEIGHT*Game.SCALE)/2 + 48;
 			
 			if (renderText == true) {
-				renderText("Arial", Font.BOLD, 25, text, "center", textX, textY, Color.white, g);
+				renderText("Arial", Font.BOLD, 25, text, "center", textX, textY, Color.blue, g);
 			}
 			animateText();
 			break;
@@ -34,11 +37,14 @@ public class UI {
 			
 			text = "<Press SPACE to Restart>";
 			textX = (Game.WIDTH*Game.SCALE)/2;
-			textY = (Game.HEIGHT*Game.SCALE)/2 + 180;
+			textY = (Game.HEIGHT*Game.SCALE)/2 + 165;
 			
 			if (renderText == true) {
-				renderText("Arial", Font.BOLD, 25, text, "center", textX, textY, Color.white, g);
+				renderText("Arial", Font.BOLD, 25, text, "center", textX, textY, Color.blue, g);
 			}
+			
+			renderText("SansSerif", Font.BOLD, 40, "Game Over", "center", (Game.WIDTH*Game.SCALE)/2, 70, Color.orange, g);
+			
 			animateText();
 			break;			
 			}

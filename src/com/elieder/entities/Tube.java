@@ -17,6 +17,8 @@ public class Tube extends Entity {
 	
 	private int pipePosition;
 	
+	private boolean scored = false;
+	
 	public Tube(int x, int y, int width, int height, double speed, BufferedImage sprite, int position) {
 		super(x, y, width, height, speed, sprite);
 		
@@ -35,8 +37,9 @@ public class Tube extends Entity {
 		
 		x-=Game.gameSpeed;
 		
-		if (x +(Game.spriteSize/2) == Game.player.x) {
+		if (x +(Game.spriteSize/2) == Game.player.x & scored == false) {
 			Game.score++;
+			scored = true;
 			if (Game.score > Game.bestScore) {
 				Game.bestScore++;
 			}

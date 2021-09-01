@@ -21,10 +21,10 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import com.elieder.entities.Background;
 import com.elieder.entities.Entity;
 import com.elieder.entities.Ground;
 import com.elieder.entities.Player;
-import com.elieder.graficos.CustomFont;
 import com.elieder.graficos.ScoreBoard;
 import com.elieder.graficos.Spritesheet;
 import com.elieder.graficos.UI;
@@ -69,8 +69,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static int score = 0;
 	public static int bestScore = 0;
 	
-	public InputStream stream; 
-	public static Font flappyBirdFont;
+	public static Background background;
 		
 	
 	public Game() {		
@@ -83,6 +82,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		
 //		Inicializando objetos		
+		background = new Background("/Background.PNG");
 		spritesheet = new Spritesheet("/Spritesheet.png");
 		tubeGenerator = new TubeGenerator();
 		groundGenerator = new GroundGenerator("/Ground.png");
@@ -94,16 +94,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		
 		loadGame();		
 	
-		gameState = STARTSCREEN;
+		gameState = STARTSCREEN;			
 		
-		stream = ClassLoader.getSystemClassLoader().getResourceAsStream("/tw-cen-mt-condensed-3.ttf");
-		
-		try {
-			flappyBirdFont = Font.createFont(Font.TRUETYPE_FONT, stream);
-		} catch (FontFormatException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 	}
 	
@@ -216,6 +208,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 //		Render entities
 		Collections.sort(entities, Entity.nodeSorter);
 		
+		background.render(g);
 		renderEntities(g);
 		renderGrounds(g);
 		
