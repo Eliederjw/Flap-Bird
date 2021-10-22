@@ -1,3 +1,3 @@
 # Flap-Bird
 
-![GitHub Logo](/Flappy_Bird.png)
+![GitHub Logo](/Flappy_Bird.gif)
